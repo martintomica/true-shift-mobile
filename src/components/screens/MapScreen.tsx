@@ -4,8 +4,6 @@ import { useAppStore } from '../../store/useAppStore';
 import { sites, workers } from '../../data/mockData';
 import { WorkerSheet } from '../WorkerSheet';
 
-type MapMode = 'sites' | 'workers';
-
 const WORKER_COLORS: Record<string, string> = {
   green: '#2E7D5B',
   red: '#A81E14',
@@ -16,8 +14,6 @@ const WORKER_COLORS: Record<string, string> = {
 export function MapScreen() {
   const activeScreen = useAppStore((s) => s.activeScreen);
   const selectWorker = useAppStore((s) => s.selectWorker);
-
-  const [mode, setMode] = useState<MapMode>('sites');
 
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
@@ -93,16 +89,11 @@ export function MapScreen() {
     const workerLayer = workerLayerRef.current;
     if (!map || !siteLayer || !workerLayer) return;
 
-    if (mode === 'sites') {
       map.addLayer(siteLayer);
-      map.removeLayer(workerLayer);
-    } else {
       map.addLayer(workerLayer);
-      map.removeLayer(siteLayer);
-    }
 
     selectWorker(null);
-  }, [mode, selectWorker]);
+  }, [selectWorker]);
 
   // Leaflet needs a resize nudge once its container becomes visible again.
   useEffect(() => {
@@ -116,34 +107,6 @@ export function MapScreen() {
       <div className="map-canvas">
         <div ref={containerRef} />
       </div>
-
-      <div className="map-controls">
-        <div className="seg">
-          <button
-            id="seg-sites"
-            className={`seg-btn ${mode === 'sites' ? 'active' : ''}`}
-            onClick={() => setMode('sites')}
-          >
-            Stavby
-          </button>
-          <button
-            id="seg-workers"
-            className={`seg-btn ${mode === 'workers' ? 'active' : ''}`}
-            onClick={() => setMode('workers')}
-          >
-            Pracovníci
-          </button>
-        </div>
-      </div>
-
-      {mode === 'sites' ? (
-        <div className="map-legend">
-          <span>
-            <i className="dot amber" />
-            Areál stavby (geofence)
-          </span>
-        </div>
-      ) : (
         <div className="map-legend">
           <span>
             <i className="dot green" />
@@ -162,7 +125,6 @@ export function MapScreen() {
             Mimo stavbu
           </span>
         </div>
-      )}
 
       <WorkerSheet />
     </section>
