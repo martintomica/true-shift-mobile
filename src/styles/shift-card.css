@@ -1,0 +1,115 @@
+.clock-card {
+  background: var(--charcoal);
+  color: #fbfaf8;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.clock-card.off {
+  background: #ffffff;
+  color: var(--charcoal);
+  border: 1px solid var(--border-alt);
+}
+
+.clock-card.lg {
+  padding: 24px;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.clock-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: pulse 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+.status-dot.off {
+  background: var(--muted-4);
+  animation: none;
+  opacity: 1;
+}
+
+.clock-status {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11.5px;
+  letter-spacing: 0.03em;
+  opacity: 0.85;
+}
+
+.clock-timer {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 600;
+  font-size: 32px;
+  letter-spacing: -0.01em;
+}
+
+.clock-card.lg .clock-timer {
+  font-size: 46px;
+}
+
+.clock-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.gps-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  background: rgba(76, 175, 125, 0.16);
+  color: var(--gps-green-text);
+  padding: 5px 10px;
+}
+
+.gps-chip .material-symbols-outlined {
+  font-size: 14px;
+}
+
+.clock-btn {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  padding: 10px 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.clock-btn.end {
+  background: #fbfaf8;
+  color: var(--charcoal);
+}
+
+.clock-btn.start {
+  background: var(--amber);
+  color: var(--charcoal);
+  border: 1px solid var(--amber-border);
+}

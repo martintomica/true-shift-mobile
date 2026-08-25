@@ -1,0 +1,60 @@
+:root {
+  --amber: #f0a828;
+  --amber-border: #d9931f;
+  --charcoal: #17191c;
+  --steel: #3a4048;
+
+  --n1: #ffffff;
+  --n2: #f1eee9;
+  --n3: #ddd8d1;
+  --n4: #b9b2a8;
+  --n5: #8a9099;
+  --n6: #5c646e;
+  --n7: #23272b;
+
+  --surface: #f7f5f2;
+  --card-alt: #fbfaf8;
+  --page-bg: #e7e3dd;
+
+  --border: #ddd8d1;
+  --border-alt: #e4dfd8;
+  --border-strong: #cfc9c0;
+
+  --track: #ede9e3;
+
+  --muted: #6c7480;
+  --muted-2: #5c646e;
+  --muted-3: #8a9099;
+  --muted-4: #9aa0a8;
+
+  --green: #2e7d5b;
+  --green-bg: #e7f1eb;
+  --green-text: #1f6047;
+
+  --clay: #c2571f;
+  --clay-bg: #fbede4;
+  --clay-text: #9a4416;
+
+  --red: #a81e14;
+  --red-bg: #fae9e7;
+  --red-text: #8e1810;
+  --red-border: #e3b7b3;
+  --red-hover: #fcf1f0;
+
+  --info: #3f5d74;
+  --info-bg: #e9eef2;
+  --info-text: #2f4a5e;
+
+  --nav-bg: #1b1e22;
+  --nav-border: #2c3137;
+  --nav-hover: #26292e;
+
+  --nav-muted: #9aa0a8;
+  --nav-muted-2: #7e858e;
+  --nav-muted-3: #6e757e;
+
+  --gps-green: #4caf7d;
+  --gps-green-text: #7fbf9e;
+
+  --link: #a0741b;
+}

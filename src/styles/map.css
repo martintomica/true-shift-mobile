@@ -1,0 +1,91 @@
+#screen-map.screen {
+  padding: 0;
+  overflow: hidden;
+}
+
+.map-controls {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 1000;
+}
+
+.seg {
+  display: inline-flex;
+  background: var(--nav-bg);
+  padding: 3px;
+  box-shadow: 0 6px 16px rgba(23, 25, 28, 0.22);
+}
+
+.seg-btn {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 7px 15px;
+  border: none;
+  background: none;
+  color: var(--nav-muted);
+  cursor: pointer;
+}
+
+.seg-btn.active {
+  background: var(--amber);
+  color: var(--charcoal);
+}
+
+.map-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--track);
+  z-index: 0;
+}
+
+.map-canvas .leaflet-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.map-legend {
+  position: absolute;
+  left: 16px;
+  bottom: 86px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid var(--border-strong);
+  padding: 9px 11px;
+  font-size: 10.5px;
+  box-shadow: 0 4px 12px rgba(23, 25, 28, 0.15);
+}
+
+.map-legend .dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+.dot.green {
+  background: var(--green);
+}
+.dot.clay {
+  background: var(--clay);
+}
+.dot.red {
+  background: var(--red);
+}
+.dot.gray {
+  background: var(--muted-3);
+}
+.dot.amber {
+  background: var(--amber);
+}
