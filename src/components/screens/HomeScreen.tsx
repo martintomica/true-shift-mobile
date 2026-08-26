@@ -6,6 +6,7 @@ export function HomeScreen() {
   const activeScreen = useAppStore((s) => s.activeScreen);
   const setActiveScreen = useAppStore((s) => s.setActiveScreen);
   const notifications = useAppStore((s) => s.notifications);
+  const focusSite = useAppStore((s) => s.focusSite);
 
   const totalPresent = sites.reduce((sum, s) => sum + s.present, 0);
   const totalWorkers = sites.reduce((sum, s) => sum + s.total, 0);
@@ -53,7 +54,10 @@ export function HomeScreen() {
           <div
             key={site.id}
             className="site-card"
-            onClick={() => setActiveScreen('map')}
+            onClick={() => {
+            focusSite(site.id);
+            setActiveScreen('map');
+          }}
           >
             <div className="site-card-top">
               <strong>{site.name}</strong>

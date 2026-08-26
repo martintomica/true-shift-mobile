@@ -22,14 +22,19 @@ export interface Worker {
   status: WorkerStatus;
 }
 
-export interface WorkerDetail {
+export type WorkerIncident = 'none' | 'late' | 'alcohol';
+
+export type WorkerDetail = {
   z: string;
   cat: string;
   site: string;
   method: string;
   time: string;
   trust: string;
-}
+  incident?: WorkerIncident;
+  lateMinutes?: number;
+  alcoholPromile?: number;
+};
 
 export type NotifKind = 'urgent' | 'review' | 'info' | 'success';
 

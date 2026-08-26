@@ -26,10 +26,19 @@ interface AppState {
   selectedWorker: string | null;
   selectWorker: (name: string | null) => void;
 
+  // map focus
+  focusedSiteId: string | null;
+  focusRequestId: number;
+  focusSite: (siteId: string) => void;
+
   // toast
   toastVisible: boolean;
   showToast: () => void;
   hideToast: () => void;
+
+  //focus Worker
+  focusedWorkerKey: string | null;
+  setFocusedWorkerKey: (key: string | null) => void;
 }
 
 export const useAppStore = create<AppState>((set, get) => ({
@@ -58,7 +67,15 @@ export const useAppStore = create<AppState>((set, get) => ({
   selectedWorker: null,
   selectWorker: (name) => set({ selectedWorker: name }),
 
+  focusedSiteId: null,
+  focusRequestId: 0,
+  focusSite: (siteId) =>
+    set((s) => ({ focusedSiteId: siteId, focusRequestId: s.focusRequestId + 1 })),
+
   toastVisible: false,
   showToast: () => set({ toastVisible: true }),
   hideToast: () => set({ toastVisible: false }),
+
+  focusedWorkerKey: null,
+  setFocusedWorkerKey: (key) => set({ focusedWorkerKey: key })
 }));
