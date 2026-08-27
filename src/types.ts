@@ -1,4 +1,4 @@
-export type ScreenName = 'home' | 'attendance' | 'map' | 'notifications';
+export type ScreenName = 'home' | 'attendance' | 'trip' | 'map' | 'notifications';
 
 export type WorkerStatus = 'green' | 'red' | 'clay' | 'gray';
 
@@ -67,4 +67,15 @@ export interface WeekRow {
   checkOut: string;
   hours: string;
   isToday?: boolean;
+}
+
+export interface TravelRoute {
+  id: string;
+  date: string;
+  departure: string;
+  arrival: string;
+  from: string;
+  to: string;
+  distanceKm: string;
+  durationMin: number;
 }

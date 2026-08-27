@@ -7,6 +7,7 @@ import { TabBar } from './components/TabBar';
 import { Toast } from './components/Toast';
 import { HomeScreen } from './components/screens/HomeScreen';
 import { AttendanceScreen } from './components/screens/AttendanceScreen';
+import { TripScreen } from './components/screens/TripScreen';
 import { MapScreen } from './components/screens/MapScreen';
 import { NotificationsScreen } from './components/screens/NotificationsScreen';
 
@@ -33,6 +34,7 @@ export default function App() {
         <main className="screens">
           <HomeScreen />
           <AttendanceScreen />
+          <TripScreen />
           <MapScreen />
           <NotificationsScreen />
         </main>

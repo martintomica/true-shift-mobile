@@ -4,7 +4,7 @@ import type { ScreenName } from '../types';
 const TABS: { screen: ScreenName; icon: string; label: string; showBadge?: boolean; action?: boolean }[] = [
   { screen: 'home', icon: 'space_dashboard', label: 'Přehled' },
   { screen: 'attendance', icon: 'schedule', label: 'Docházka' },
-  { screen: 'attendance', icon: 'directions_car', label: 'Výjezd', action: true },
+  { screen: 'trip', icon: 'directions_car', label: 'Výjezd', action: true },
   { screen: 'map', icon: 'map', label: 'Mapa' },
   { screen: 'notifications', icon: 'notifications', label: 'Oznámení', showBadge: true },
 ];

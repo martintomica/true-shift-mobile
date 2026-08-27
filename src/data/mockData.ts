@@ -3,6 +3,7 @@ import type {
   Worker,
   WorkerDetail,
   Notification,
+  TravelRoute,
   WeekRow,
 } from '../types';
 
@@ -530,9 +531,22 @@ export const weekRows: WeekRow[] = [
   },
 ];
 
+export const travelRoutes: TravelRoute[] = [
+  { id: 'route-18-1', date: '18. 8.', departure: '06:05', arrival: '06:42', from: 'Konská 278, Třinec', to: 'Hala Vítkovice', distanceKm: '43,8', durationMin: 37 },
+  { id: 'route-18-2', date: '18. 8.', departure: '15:12', arrival: '15:49', from: 'Hala Vítkovice', to: 'Konská 278, Třinec', distanceKm: '43,8', durationMin: 37 },
+  { id: 'route-19-1', date: '19. 8.', departure: '06:10', arrival: '06:46', from: 'Konská 278, Třinec', to: 'Rezidence Vinohrady', distanceKm: '39,5', durationMin: 36 },
+  { id: 'route-19-2', date: '19. 8.', departure: '15:18', arrival: '15:55', from: 'Rezidence Vinohrady', to: 'Konská 278, Třinec', distanceKm: '39,5', durationMin: 37 },
+  { id: 'route-20-1', date: '20. 8.', departure: '06:02', arrival: '06:39', from: 'Konská 278, Třinec', to: 'Administrativní centrum Karolina', distanceKm: '41,2', durationMin: 37 },
+  { id: 'route-20-2', date: '20. 8.', departure: '15:16', arrival: '15:54', from: 'Administrativní centrum Karolina', to: 'Konská 278, Třinec', distanceKm: '41,2', durationMin: 38 },
+  { id: 'route-21-1', date: '21. 8.', departure: '05:55', arrival: '06:36', from: 'Konská 278, Třinec', to: 'Polyfunkční dům Poruba', distanceKm: '45,6', durationMin: 41 },
+  { id: 'route-21-2', date: '21. 8.', departure: '17:28', arrival: '18:10', from: 'Polyfunkční dům Poruba', to: 'Konská 278, Třinec', distanceKm: '45,6', durationMin: 42 },
+  { id: 'route-22-1', date: '22. 8.', departure: '06:08', arrival: '06:52', from: 'Konská 278, Třinec', to: 'Most Svinov', distanceKm: '47,1', durationMin: 44 },
+];
+
 export const screenTitles: Record<string, string> = {
   home: 'Přehled',
   attendance: 'Docházka',
   map: 'Stavby a pracovníci',
+  trip: 'Výjezd',
   notifications: 'Oznámení',
 };
