@@ -56,6 +56,8 @@ export interface Notification {
   actions?: NotifAction[];
   resolved: boolean;
   section: 'today' | 'earlier';
+  targetSiteId?: string;
+  targetWorkerName?: string;
 }
 
 export interface WeekRow {

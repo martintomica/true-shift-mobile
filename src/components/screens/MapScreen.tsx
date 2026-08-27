@@ -11,6 +11,7 @@ type Mode = 'far' | 'near';
 type WorkerTone = 'green' | 'red' | 'clay' | 'gray';
 type WorkerFilter = 'all' | WorkerTone | 'outside';
 type SiteTone = 'green' | 'clay' | 'red';
+type MapEntity = 'sites' | 'workers';
 
 type WorkerContext = {
   worker: WorkerItem;
@@ -202,6 +203,7 @@ export function MapScreen() {
   const selectedWorker = useAppStore((s) => s.selectedWorker);
   const selectWorker = useAppStore((s) => s.selectWorker);
   const focusedSiteId = useAppStore((s) => s.focusedSiteId);
+  const focusedWorkerName = useAppStore((s) => s.focusedWorkerName);
   const focusRequestId = useAppStore((s) => s.focusRequestId);
   const focusedWorkerKey = useAppStore((s) => s.focusedWorkerKey);
   const setFocusedWorkerKey = useAppStore((s) => s.setFocusedWorkerKey);
@@ -214,10 +216,12 @@ export function MapScreen() {
   const [mode, setMode] = useState<Mode>('far');
   const [selectedSiteId, setSelectedSiteId] = useState<string | null>(null);
   const [search, setSearch] = useState('');
+  const [entity, setEntity] = useState<MapEntity>('sites');
   const [workerFilter, setWorkerFilter] = useState<WorkerFilter>('all');
   const [isSheetCollapsed, setIsSheetCollapsed] = useState(false);
   const [layers, setLayers] = useState({
     sites: true,
+    zones: true,
     workers: true,
   });
 
@@ -300,11 +304,17 @@ export function MapScreen() {
 
       if (workerFilter === 'all') return true;
       if (workerFilter === 'outside') return ctx.outside;
-      if (ctx.outside) return false;
 
       return ctx.status === workerFilter;
     });
   }, [workerContexts, q, workerFilter]);
+
+  const searchFilteredSiteStats = useMemo(() => {
+    return siteStats.filter((row) => {
+      if (!q) return true;
+      return row.site.name.toLowerCase().includes(q) || row.site.code.toLowerCase().includes(q);
+    });
+  }, [siteStats, q]);
 
   const filteredWorkers = useMemo(() => {
     if (!selectedSite) return [];
@@ -471,7 +481,7 @@ export function MapScreen() {
     workerLayer.clearLayers();
 
     if (mode === 'far') {
-      if (layers.sites) {
+      if (layers.zones) {
         filteredSiteStats.forEach((row) => {
           const color = WORKER_COLORS[row.tone];
 
@@ -491,7 +501,11 @@ export function MapScreen() {
 
           circle.on('click', () => openSite(row.site.id));
           circle.addTo(siteLayer);
+        });
+      }
 
+      if (layers.sites) {
+        filteredSiteStats.forEach((row) => {
           const marker = L.marker([row.site.lat, row.site.lng], {
             icon: siteCardIcon(row.site, row.insideCount, row.totalCount, row.tone, false),
           });
@@ -523,10 +537,10 @@ export function MapScreen() {
     }
 
     if (mode === 'near' && selectedSite) {
-      if (layers.sites) {
-        const tone = selectedSiteStat?.tone ?? 'green';
-        const color = WORKER_COLORS[tone];
+      const tone = selectedSiteStat?.tone ?? 'green';
+      const color = WORKER_COLORS[tone];
 
+      if (layers.zones) {
         const circle = L.circle([selectedSite.lat, selectedSite.lng], {
           radius: selectedSite.radius,
           color,
@@ -541,7 +555,9 @@ export function MapScreen() {
         });
 
         circle.addTo(siteLayer);
+      }
 
+      if (layers.sites) {
         const marker = L.marker([selectedSite.lat, selectedSite.lng], {
           icon: siteCardIcon(
             selectedSite,
@@ -558,7 +574,6 @@ export function MapScreen() {
       if (layers.workers) {
         filteredWorkers.forEach((ctx) => {
           const active = focusedWorkerKey === ctx.key;
-
           const marker = L.circleMarker([ctx.worker.lat, ctx.worker.lng], {
             radius: active ? 10 : 8,
             color: '#FFFFFF',
@@ -606,15 +621,25 @@ export function MapScreen() {
     const id = window.setTimeout(() => {
       setMode('near');
       setSelectedSiteId(site.id);
-      setFocusedWorkerKey(null);
       setIsSheetCollapsed(false);
-      selectWorker(null);
       mapRef.current?.invalidateSize();
-      mapRef.current?.flyTo([site.lat, site.lng], 17, { duration: 0.8 });
+      const targetWorker = focusedWorkerName
+        ? workerContexts.find((ctx) => ctx.worker.name === focusedWorkerName && ctx.site.id === site.id)
+        : null;
+
+      if (targetWorker) {
+        setFocusedWorkerKey(targetWorker.key);
+        selectWorker(targetWorker.worker.name);
+        mapRef.current?.flyTo([targetWorker.worker.lat, targetWorker.worker.lng], 18, { duration: 0.8 });
+      } else {
+        setFocusedWorkerKey(null);
+        selectWorker(null);
+        mapRef.current?.flyTo([site.lat, site.lng], 17, { duration: 0.8 });
+      }
     }, 120);
 
     return () => window.clearTimeout(id);
-  }, [focusRequestId, focusedSiteId, selectWorker, setFocusedWorkerKey]);
+  }, [focusRequestId, focusedSiteId, focusedWorkerName, workerContexts, selectWorker, setFocusedWorkerKey]);
 
   return (
     <section
@@ -662,7 +687,7 @@ export function MapScreen() {
             onClick={() => setLayers((s) => ({ ...s, sites: !s.sites }))}
             type="button"
           >
-            Zóny
+            Stavby
           </button>
 
           <button
@@ -671,6 +696,14 @@ export function MapScreen() {
             type="button"
           >
             Lidé
+          </button>
+
+          <button
+            className={`map-mobile__chip ${layers.zones ? 'is-active' : ''}`}
+            onClick={() => setLayers((s) => ({ ...s, zones: !s.zones }))}
+            type="button"
+          >
+            Zóny
           </button>
         </div>
 
@@ -764,10 +797,12 @@ export function MapScreen() {
 
           <div className="map-mobile__sheet-header">
             <div>
-              <strong>{mode === 'far' ? 'Stavby' : 'Pracovníci na stavbě'}</strong>
+              <strong>{mode === 'far' ? (entity === 'sites' ? 'Stavby' : 'Lidé na stavbách') : 'Pracovníci na stavbě'}</strong>
               <span>
                 {mode === 'far'
-                  ? `${filteredSiteStats.length} z ${siteStats.length}`
+                  ? entity === 'sites'
+                    ? `${searchFilteredSiteStats.length} z ${siteStats.length}`
+                    : `${globallyFilteredWorkers.length} z ${workerContexts.length}`
                   : `${filteredWorkers.length} z ${selectedSiteWorkersAll.length}`}
               </span>
             </div>
@@ -785,11 +820,32 @@ export function MapScreen() {
             )}
           </div>
 
+          <div className="map-mobile__entity-switch" role="tablist" aria-label="Typ seznamu">
+            <button
+              className={entity === 'sites' ? 'is-active' : ''}
+              onClick={() => setEntity('sites')}
+              type="button"
+              role="tab"
+              aria-selected={entity === 'sites'}
+            >
+              Stavby
+            </button>
+            <button
+              className={entity === 'workers' ? 'is-active' : ''}
+              onClick={() => setEntity('workers')}
+              type="button"
+              role="tab"
+              aria-selected={entity === 'workers'}
+            >
+              Lidé
+            </button>
+          </div>
+
           {!isSheetCollapsed && (
             <>
               <div className="map-mobile__sheet-list">
-                {mode === 'far' &&
-                  filteredSiteStats.map((row) => (
+                {mode === 'far' && entity === 'sites' &&
+                  searchFilteredSiteStats.map((row) => (
                     <button
                       key={row.site.id}
                       className="map-mobile__row"
@@ -802,25 +858,38 @@ export function MapScreen() {
                       />
                       <div className="map-mobile__row-main">
                         <strong>{row.site.name}</strong>
-                        <span>
-                          {String((row.site as { code?: string }).code ?? row.site.id)} ·{' '}
-                          {row.insideCount} uvnitř · {row.totalCount} lidí
-                        </span>
+                        <span>{row.site.code} · {row.insideCount} uvnitř · {row.totalCount} lidí</span>
                       </div>
                       <span
                         className="map-mobile__row-badge"
-                        style={{
-                          background: BADGE_BG[row.tone],
-                          color: BADGE_FG[row.tone],
-                        }}
+                        style={{ background: BADGE_BG[row.tone], color: BADGE_FG[row.tone] }}
                       >
                         {getSiteToneLabel(row)}
                       </span>
                     </button>
                   ))}
 
-                {mode === 'far' && filteredSiteStats.length === 0 && (
-                  <div className="map-mobile__empty">Žádná stavba neodpovídá filtru.</div>
+                {mode === 'far' && entity === 'workers' &&
+                  globallyFilteredWorkers.map((ctx) => (
+                    <button
+                      key={ctx.key}
+                      className="map-mobile__row"
+                      onClick={() => focusWorkerFromFar(ctx)}
+                      type="button"
+                    >
+                      <span className="map-mobile__row-dot" style={{ background: WORKER_COLORS[ctx.displayTone] }} />
+                      <div className="map-mobile__row-main">
+                        <strong>{ctx.worker.name}</strong>
+                        <span>{ctx.site.name} · {ctx.distanceM} m od stavby</span>
+                      </div>
+                      <span className="map-mobile__row-badge" style={{ background: BADGE_BG[ctx.displayTone], color: BADGE_FG[ctx.displayTone] }}>
+                        {ctx.outside ? 'Mimo zónu' : STATUS_LABEL[ctx.displayTone]}
+                      </span>
+                    </button>
+                  ))}
+
+                {mode === 'far' && entity === 'sites' && searchFilteredSiteStats.length === 0 && (
+                  <div className="map-mobile__empty">Žádná stavba neodpovídá hledání.</div>
                 )}
 
                 {mode === 'near' &&

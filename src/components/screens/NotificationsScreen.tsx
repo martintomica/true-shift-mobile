@@ -3,9 +3,25 @@ import type { Notification } from '../../types';
 
 function NotifCard({ notif }: { notif: Notification }) {
   const resolveNotification = useAppStore((s) => s.resolveNotification);
+  const setActiveScreen = useAppStore((s) => s.setActiveScreen);
+  const focusWorker = useAppStore((s) => s.focusWorker);
+
+  function openOnMap() {
+    if (!notif.targetSiteId || !notif.targetWorkerName) return;
+    setActiveScreen('map');
+    focusWorker(notif.targetSiteId, notif.targetWorkerName);
+  }
 
   return (
-    <div className={`notif-card ${notif.kind} ${notif.resolved ? 'resolved' : ''}`}>
+    <div
+      className={`notif-card ${notif.kind} ${notif.resolved ? 'resolved' : ''} ${notif.targetWorkerName ? 'is-clickable' : ''}`}
+      onClick={openOnMap}
+      role={notif.targetWorkerName ? 'button' : undefined}
+      tabIndex={notif.targetWorkerName ? 0 : undefined}
+      onKeyDown={(event) => {
+        if (event.key === 'Enter' || event.key === ' ') openOnMap();
+      }}
+    >
       <span className="material-symbols-outlined notif-icon">{notif.icon}</span>
 
       <div className="notif-body">
@@ -19,7 +35,8 @@ function NotifCard({ notif }: { notif: Notification }) {
               <button
                 key={action.label}
                 className={action.primary ? 'primary' : ''}
-                onClick={() => {
+                onClick={(event) => {
+                  event.stopPropagation();
                   if (action.resolves !== false) resolveNotification(notif.id);
                 }}
               >

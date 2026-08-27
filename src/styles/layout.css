@@ -59,12 +59,105 @@
 .app-header {
   height: 56px;
   flex-shrink: 0;
-  background: #ffffff;
-  border-bottom: 1px solid var(--border-alt);
+  background: #17191c;
+  border-bottom: 1px solid #2c3137;
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 0 16px;
+}
+
+.brand-lockup {
+  flex-shrink: 0;
+}
+
+.brand-lockup__tag {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  width: 175px;
+  height: 36px;
+  gap: 0;
+  padding: 2px 10px 3px 12px;
+  background: var(--amber);
+  clip-path: polygon(0 0, 100% 0, 100% 66%, calc(100% - 9px) 100%, 0 100%);
+  color: var(--charcoal);
+}
+
+.brand-lockup__build {
+  align-self: flex-start;
+  position: relative;
+  top: 2px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+
+.brand-lockup__name {
+  display: flex;
+  align-items: center;
+  position: relative;
+  top: 0px;
+  font-family: 'Archivo', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.brand-lockup__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 3px);
+  grid-template-rows: repeat(5, 3px);
+  gap: 1px;
+  width: 11px;
+  height: 17px;
+  margin: 0 2px;
+}
+
+.brand-lockup__grid span {
+  display: block;
+}
+
+.brand-lockup__grid-cell {
+  background: #ffffff;
+}
+
+.brand-lockup__registered {
+  align-self: flex-start;
+  position: relative;
+  top: 12px;
+  margin-left: 0px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 8px;
+  line-height: 1;
+}
+
+@media (max-width: 400px) {
+  .brand-lockup__tag {
+    width: 145px;
+    height: 32px;
+    padding-left: 9px;
+    padding-right: 9px;
+  }
+
+  .brand-lockup__build {
+    font-size: 8px;
+  }
+
+  .brand-lockup__name {
+    font-size: 17px;
+  }
+
+  .brand-lockup__grid {
+    grid-template-columns: repeat(3, 2.5px);
+    grid-template-rows: repeat(5, 2.5px);
+    width: 9px;
+    height: 14px;
+  }
 }
 
 .brandmark {
@@ -91,6 +184,7 @@
   font-weight: 700;
   font-size: 18px;
   letter-spacing: -0.01em;
+  color: #fbfaf8;
 }
 
 .header-right {
@@ -106,7 +200,7 @@
   gap: 5px;
   font-family: 'IBM Plex Mono', monospace;
   font-size: 10.5px;
-  color: var(--muted);
+  color: #dbdddf;
 }
 
 .sync-dot {
@@ -122,7 +216,7 @@
   background: none;
   border: none;
   cursor: pointer;
-  color: var(--steel);
+  color: #dbdddf;
   padding: 4px;
   display: flex;
 }
@@ -219,6 +313,44 @@
 .tab.active,
 .tab.active .material-symbols-outlined {
   color: var(--amber);
+}
+
+.tab--departure {
+  align-self: center;
+  height: 58px;
+  margin: 0 3px;
+  padding: 5px 8px 4px;
+  gap: 2px;
+  background: var(--amber);
+  color: var(--charcoal);
+  border: 1px solid var(--amber-border);
+  transform: skewX(-8deg);
+  box-shadow: 0 7px 14px rgba(240, 168, 40, 0.28);
+  font-weight: 700;
+}
+
+.tab--departure > * {
+  transform: skewX(8deg);
+}
+
+.tab--departure .material-symbols-outlined {
+  color: var(--charcoal);
+  font-size: 23px;
+}
+
+.tab--departure:hover {
+  background: #f6b94d;
+}
+
+.tab--departure:focus-visible {
+  outline: 2px solid var(--charcoal);
+  outline-offset: 2px;
+}
+
+.tab-departure-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .tab .badge-count {

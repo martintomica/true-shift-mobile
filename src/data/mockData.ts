@@ -461,40 +461,41 @@ export const workerDetails: Record<string, WorkerDetail> = {
   },
 };
 
+const incidentNotifications: Notification[] = Object.entries(workerDetails)
+  .filter(([, detail]) => detail.incident && detail.incident !== 'none')
+  .map(([workerName, detail]) => {
+    const site = sites.find((item) => item.name === detail.site);
+    const isAlcohol = detail.incident === 'alcohol';
+
+    return {
+      id: `incident-${detail.z.toLowerCase()}`,
+      kind: isAlcohol ? 'urgent' : 'review',
+      icon: isAlcohol ? 'warning' : 'schedule',
+      title: isAlcohol
+        ? 'Dechová zkouška — pozitivní'
+        : `Zpoždění ${detail.lateMinutes ?? 0} min`,
+      meta: `${workerName} · ${detail.z} · ${detail.site} · ${detail.time}`,
+      detail: isAlcohol
+        ? `Naměřeno ${String(detail.alcoholPromile ?? 0).replace('.', ',')} ‰ při příchodu na terminál. Incident vyžaduje okamžité řešení.`
+        : `Příchod byl o ${detail.lateMinutes ?? 0} minut později. Incident vyžaduje kontrolu.`,
+      actions: isAlcohol
+        ? [
+            { label: 'Poslat domů', primary: true },
+            { label: 'Zavolat', icon: 'call', resolves: false },
+            { label: 'Vyřešeno' },
+          ]
+        : [{ label: 'Schválit', primary: true }, { label: 'Zamítnout' }],
+      resolved: false,
+      section: 'today',
+      targetSiteId: site?.id,
+      targetWorkerName: workerName,
+    } satisfies Notification;
+  });
+
 export const initialNotifications: Notification[] = [
+  ...incidentNotifications,
   {
-    id: 'n1',
-    kind: 'urgent',
-    icon: 'warning',
-    title: 'Dechová zkouška — pozitivní',
-    meta: 'Jan Dvořák · Z1013 · Hala Vítkovice · 06:52',
-    detail:
-      'Naměřeno 0,3 ‰ při příchodu na terminál. Pracovník byl vpuštěn na stavbu, případ vyžaduje okamžité řešení.',
-    actions: [
-      { label: 'Poslat domů', primary: true },
-      { label: 'Zavolat', icon: 'call', resolves: false },
-      { label: 'Vyřešeno' },
-    ],
-    resolved: false,
-    section: 'today',
-  },
-  {
-    id: 'n2',
-    kind: 'review',
-    icon: 'schedule',
-    title: 'Zpoždění 22 min + náhradní metoda',
-    meta: 'Petr Malý · Z1067 · Rezidence Vinohrady · 07:34',
-    detail:
-      'Nad toleranci 10 min. Rozpoznání tváře selhalo 2×, použita karta + PIN — příchod povolen.',
-    actions: [
-      { label: 'Schválit', primary: true },
-      { label: 'Zamítnout' },
-    ],
-    resolved: false,
-    section: 'today',
-  },
-  {
-    id: 'n3',
+    id: 'n-terminal-weak-connection',
     kind: 'info',
     icon: 'cloud_off',
     title: 'Terminál Hala Vítkovice — slabé spojení',
@@ -504,7 +505,7 @@ export const initialNotifications: Notification[] = [
     section: 'earlier',
   },
   {
-    id: 'n4',
+    id: 'n-daily-summary',
     kind: 'success',
     icon: 'check_circle',
     title: '42 příchodů automaticky schváleno',
