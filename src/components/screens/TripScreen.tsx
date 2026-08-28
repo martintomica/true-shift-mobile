@@ -218,9 +218,6 @@ export function TripScreen() {
               </button>
             </div>
             <label className="trip-label" htmlFor="trip-site">Cíl cesty</label>
-            <select id="trip-site" value={siteId} onChange={(event) => setSiteId(event.target.value)}>
-              {sites.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}
-            </select>
             <div className="trip-site-list" aria-label="Seznam cílů cesty">
               {sites.map((item) => (
                 <button

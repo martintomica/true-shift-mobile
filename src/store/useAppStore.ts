@@ -47,7 +47,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   activeScreen: 'home',
   setActiveScreen: (screen) => set({ activeScreen: screen, selectedWorker: null }),
 
-  shiftActive: true,
+  shiftActive: false,
   elapsedSeconds: 6 * 3600 + 24 * 60 + 12,
   toggleShift: () => set((s) => ({ shiftActive: !s.shiftActive })),
   tickShift: () =>

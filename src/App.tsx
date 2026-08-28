@@ -17,6 +17,7 @@ export default function App() {
   const showToast = useAppStore((s) => s.showToast);
   const hideToast = useAppStore((s) => s.hideToast);
   const toastVisible = useAppStore((s) => s.toastVisible);
+  const activeScreen = useAppStore((s) => s.activeScreen);
 
   // Auto-hide the incident toast after a few seconds, like the original setTimeout.
   useEffect(() => {
@@ -39,11 +40,13 @@ export default function App() {
           <NotificationsScreen />
         </main>
 
-        <button className="fab chamfer-sm" onClick={showToast} title="Nahlásit incident">
-          <span className="material-symbols-outlined">report</span>
-        </button>
+        {activeScreen !== 'trip' && (
+          <button className="fab chamfer-sm" onClick={showToast} title="Nahlásit incident">
+            <span className="material-symbols-outlined">report</span>
+          </button>
+        )}
 
-        <Toast />
+        {activeScreen !== 'trip' && <Toast />}
         <TabBar />
       </div>
     </div>
