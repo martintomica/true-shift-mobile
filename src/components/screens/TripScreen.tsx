@@ -56,9 +56,33 @@ export function TripScreen() {
   const [routeDistanceKm, setRouteDistanceKm] = useState<number | null>(null);
   const [routeDurationMin, setRouteDurationMin] = useState<number | null>(null);
   const [routeStatus, setRouteStatus] = useState<'idle' | 'loading' | 'ready' | 'error'>('idle');
+  const [departureOrigin, setDepartureOrigin] = useState<RoutePoint>(DEPARTURE_ORIGIN);
+  const [departureAddress, setDepartureAddress] = useState(DEPARTURE_ADDRESS);
   const site = sites.find((item) => item.id === siteId) ?? sites[0];
+  const gpsStepStatus = departureAddress === DEPARTURE_ADDRESS ? 'Výchozí adresa' : 'GPS OK';
 
   useEffect(() => () => timers.current.forEach(clearTimeout), []);
+
+  useEffect(() => {
+    if (!navigator.geolocation) {
+      return;
+    }
+
+    let cancelled = false;
+    navigator.geolocation.getCurrentPosition(
+      ({ coords }) => {
+        if (cancelled || !Number.isFinite(coords.latitude) || !Number.isFinite(coords.longitude)) return;
+        setDepartureOrigin([coords.latitude, coords.longitude]);
+        setDepartureAddress('Aktuální poloha');
+      },
+      () => undefined,
+      { enableHighAccuracy: true, timeout: 8000, maximumAge: 60000 },
+    );
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     if (!mapContainerRef.current || mapRef.current) return;
@@ -127,12 +151,12 @@ export function TripScreen() {
       }
     };
 
-    void loadRoute(DEPARTURE_ORIGIN);
+    void loadRoute(departureOrigin);
 
     return () => {
       cancelled = true;
     };
-  }, [site]);
+  }, [site, departureOrigin]);
 
   useEffect(() => {
     const routeLayer = routeLayerRef.current;
@@ -228,7 +252,7 @@ export function TripScreen() {
               <li key={pending}>
                 <span className={`trip-step-icon ${index < completedSteps ? 'is-done' : 'is-loading'}`}>{index < completedSteps ? '✓' : '…'}</span>
                 <span>{pending}{index < completedSteps ? '' : '…'}</span>
-                {index < completedSteps && <strong>{done}</strong>}
+                {index < completedSteps && <strong>{index === 0 ? gpsStepStatus : done}</strong>}
               </li>
             ))}
           </ol>
@@ -245,7 +269,7 @@ export function TripScreen() {
             </div>
             <dl className="trip-details">
               <DetailRow label="Cíl" value={site.name} />
-              <DetailRow label="Start" value={DEPARTURE_ADDRESS} />
+              <DetailRow label="Start" value={departureAddress} />
               <DetailRow label="Vzdálenost" value={routeDistanceKm !== null ? `${routeDistanceKm} km` : 'Počítám…'} />
               <DetailRow label="Doba jízdy" value={routeDurationMin !== null ? `${routeDurationMin} min` : 'Počítám…'} />
               <DetailRow label="Odjezd" value={DEPARTURE_TIME} />
