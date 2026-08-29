@@ -32,6 +32,26 @@
   background: #ddd7cf;
 }
 
+.map-mobile__leaflet .marker-cluster {
+  background: rgba(23, 25, 28, 0.1);
+  border: 0;
+}
+
+.map-mobile__leaflet .marker-cluster div {
+  width: 32px;
+  height: 32px;
+  line-height: 32px;
+  margin-left: 4px;
+  margin-top: 4px;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 800;
+  color: #f0a828;
+  background: #17191c;
+  border: 2px solid #ffffff;
+  box-shadow: 0 8px 18px rgba(23, 25, 28, 0.18);
+}
+
 .map-mobile__top {
   position: absolute;
   top: calc(env(safe-area-inset-top, 0px) + 10px);

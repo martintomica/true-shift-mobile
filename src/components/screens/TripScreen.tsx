@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
+import 'leaflet.markercluster';
 import { sites } from '../../data/mockData';
 import { useAppStore } from '../../store/useAppStore';
 
@@ -16,12 +17,16 @@ const START_STEPS = [
   ['Zaznamenávám výjezd', 'Uloženo'],
 ] as const;
 
-function tripSiteIcon(selected: boolean) {
+function tripSiteIcon(label: string, selected: boolean) {
   return L.divIcon({
     className: 'trip-map-marker',
-    html: `<span class="trip-map-marker__dot ${selected ? 'is-selected' : ''}"></span>`,
-    iconSize: [24, 24],
-    iconAnchor: [12, 12],
+    html: `
+      <div class="trip-map-marker__label ${selected ? 'is-selected' : ''}">
+        <span class="trip-map-marker__title">${label}</span>
+      </div>
+    `,
+    iconSize: [120, 34],
+    iconAnchor: [60, 17],
   });
 }
 
@@ -50,7 +55,7 @@ export function TripScreen() {
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
-  const siteLayerRef = useRef<L.LayerGroup | null>(null);
+  const siteLayerRef = useRef<L.LayerGroup | L.MarkerClusterGroup | null>(null);
   const routeLayerRef = useRef<L.LayerGroup | null>(null);
   const [route, setRoute] = useState<RoutePoint[]>([]);
   const [routeDistanceKm, setRouteDistanceKm] = useState<number | null>(null);
@@ -59,12 +64,15 @@ export function TripScreen() {
   const [departureOrigin, setDepartureOrigin] = useState<RoutePoint>(DEPARTURE_ORIGIN);
   const [departureAddress, setDepartureAddress] = useState(DEPARTURE_ADDRESS);
   const site = sites.find((item) => item.id === siteId) ?? sites[0];
+  const hasValidSite = !!site && Number.isFinite(site.lat) && Number.isFinite(site.lng);
+  const hasValidDepartureOrigin =
+    Number.isFinite(departureOrigin[0]) && Number.isFinite(departureOrigin[1]);
   const gpsStepStatus = departureAddress === DEPARTURE_ADDRESS ? 'Výchozí adresa' : 'GPS OK';
 
   useEffect(() => () => timers.current.forEach(clearTimeout), []);
 
   useEffect(() => {
-    if (!navigator.geolocation) {
+    if (activeScreen !== 'trip' || !navigator.geolocation) {
       return;
     }
 
@@ -85,11 +93,26 @@ export function TripScreen() {
   }, []);
 
   useEffect(() => {
+    if (activeScreen !== 'trip') {
+      if (mapRef.current) {
+        mapRef.current.remove();
+        mapRef.current = null;
+        siteLayerRef.current = null;
+        routeLayerRef.current = null;
+      }
+      return;
+    }
+
     if (!mapContainerRef.current || mapRef.current) return;
 
     const map = L.map(mapContainerRef.current, { zoomControl: false, attributionControl: false });
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-    const siteLayer = L.layerGroup().addTo(map);
+    const siteLayer = L.markerClusterGroup({
+      showCoverageOnHover: false,
+      maxClusterRadius: 40,
+      disableClusteringAtZoom: 17,
+      spiderfyOnMaxZoom: true,
+    }).addTo(map);
     const routeLayer = L.layerGroup().addTo(map);
     mapRef.current = map;
     siteLayerRef.current = siteLayer;
@@ -104,25 +127,29 @@ export function TripScreen() {
       siteLayerRef.current = null;
       routeLayerRef.current = null;
     };
-  }, [phase]);
+  }, [activeScreen, phase]);
 
   useEffect(() => {
+    if (activeScreen !== 'trip') return;
+
     const map = mapRef.current;
     const siteLayer = siteLayerRef.current;
-    if (!map || !siteLayer) return;
+    if (!map || !siteLayer || !hasValidSite) return;
 
     siteLayer.clearLayers();
     sites.forEach((item) => {
-      const marker = L.marker([item.lat, item.lng], { icon: tripSiteIcon(item.id === siteId) });
+      if (!Number.isFinite(item.lat) || !Number.isFinite(item.lng)) return;
+      const marker = L.marker([item.lat, item.lng], { icon: tripSiteIcon(item.name, item.id === siteId) });
       marker.bindTooltip(item.name, { direction: 'top', className: 'map-mobile-tooltip' });
       marker.on('click', () => setSiteId(item.id));
       marker.addTo(siteLayer);
     });
     map.invalidateSize();
-  }, [siteId, activeScreen, phase, mapExpanded]);
+    map.flyTo([site.lat, site.lng], 14, { duration: 0.75 });
+  }, [siteId, activeScreen, phase, mapExpanded, site, hasValidSite]);
 
   useEffect(() => {
-    if (!site) return;
+    if (activeScreen !== 'trip' || !site || !hasValidSite || !hasValidDepartureOrigin) return;
 
     let cancelled = false;
     setRouteStatus('loading');
@@ -156,9 +183,11 @@ export function TripScreen() {
     return () => {
       cancelled = true;
     };
-  }, [site, departureOrigin]);
+  }, [site, departureOrigin, hasValidSite, hasValidDepartureOrigin, activeScreen]);
 
   useEffect(() => {
+    if (activeScreen !== 'trip') return;
+
     const routeLayer = routeLayerRef.current;
     if (!routeLayer) return;
     routeLayer.clearLayers();
@@ -170,7 +199,7 @@ export function TripScreen() {
       opacity: 0.9,
       dashArray: '10 7',
     }).addTo(routeLayer);
-  }, [route, phase]);
+  }, [route, phase, activeScreen]);
 
   function clearTimers() {
     timers.current.forEach(clearTimeout);
@@ -196,7 +225,7 @@ export function TripScreen() {
     setPhase('idle');
   }
 
-  if (!site) return null;
+  if (!site || !hasValidSite) return null;
 
   return (
     <section className={`screen trip-screen ${activeScreen === 'trip' ? 'active' : ''}`} id="screen-trip">

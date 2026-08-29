@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import L from 'leaflet';
+import 'leaflet.markercluster';
 import { useAppStore } from '../../store/useAppStore';
 import { sites, workers, workerDetails } from '../../data/mockData';
 import { WorkerSheet } from '../WorkerSheet';
@@ -211,6 +212,7 @@ export function MapScreen() {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
   const siteLayerRef = useRef<L.LayerGroup | null>(null);
+  const siteMarkerLayerRef = useRef<L.MarkerClusterGroup | null>(null);
   const workerLayerRef = useRef<L.LayerGroup | null>(null);
 
   const [mode, setMode] = useState<Mode>('far');
@@ -455,10 +457,17 @@ export function MapScreen() {
     }).addTo(map);
 
     const siteLayer = L.layerGroup().addTo(map);
+    const siteMarkerLayer = L.markerClusterGroup({
+      showCoverageOnHover: false,
+      maxClusterRadius: 60,
+      disableClusteringAtZoom: 17,
+      spiderfyOnMaxZoom: true,
+    }).addTo(map);
     const workerLayer = L.layerGroup().addTo(map);
 
     mapRef.current = map;
     siteLayerRef.current = siteLayer;
+    siteMarkerLayerRef.current = siteMarkerLayer;
     workerLayerRef.current = workerLayer;
 
     fitMapToSites(map);
@@ -474,10 +483,12 @@ export function MapScreen() {
   useEffect(() => {
     const map = mapRef.current;
     const siteLayer = siteLayerRef.current;
+    const siteMarkerLayer = siteMarkerLayerRef.current;
     const workerLayer = workerLayerRef.current;
-    if (!map || !siteLayer || !workerLayer) return;
+    if (!map || !siteLayer || !siteMarkerLayer || !workerLayer) return;
 
     siteLayer.clearLayers();
+    siteMarkerLayer.clearLayers();
     workerLayer.clearLayers();
 
     if (mode === 'far') {
@@ -511,7 +522,7 @@ export function MapScreen() {
           });
 
           marker.on('click', () => openSite(row.site.id));
-          marker.addTo(siteLayer);
+          marker.addTo(siteMarkerLayer);
         });
       }
 
@@ -568,7 +579,7 @@ export function MapScreen() {
           ),
         });
 
-        marker.addTo(siteLayer);
+        marker.addTo(siteMarkerLayer);
       }
 
       if (layers.workers) {
