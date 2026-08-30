@@ -34,6 +34,8 @@ export type WorkerDetail = {
   incident?: WorkerIncident;
   lateMinutes?: number;
   alcoholPromile?: number;
+  vacationDaysUsed?: number;
+  vacationDaysTotal?: number;
 };
 
 export type NotifKind = 'urgent' | 'review' | 'info' | 'success';

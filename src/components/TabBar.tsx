@@ -11,13 +11,17 @@ const TABS: { screen: ScreenName; icon: string; label: string; showBadge?: boole
 
 export function TabBar() {
   const activeScreen = useAppStore((s) => s.activeScreen);
-  
+  const workerMode = useAppStore((s) => s.workerMode);
   const setActiveScreen = useAppStore((s) => s.setActiveScreen);
   const unresolvedCount = useAppStore((s) => s.unresolvedCount());
 
+  const tabs = workerMode
+    ? TABS.filter((tab) => tab.screen === 'home' || tab.screen === 'attendance')
+    : TABS;
+
   return (
     <nav className="tabbar">
-      {TABS.map((tab) => (
+      {tabs.map((tab) => (
         <button
           key={`${tab.screen}-${tab.label}`}
           className={`tab ${tab.action ? 'tab--departure' : ''} ${!tab.action && activeScreen === tab.screen ? 'active' : ''}`}

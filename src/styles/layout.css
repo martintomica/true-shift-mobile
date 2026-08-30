@@ -211,7 +211,8 @@
   flex-shrink: 0;
 }
 
-.bell-btn {
+.bell-btn,
+.profile-btn {
   position: relative;
   background: none;
   border: none;
@@ -221,7 +222,8 @@
   display: flex;
 }
 
-.bell-btn .material-symbols-outlined {
+.bell-btn .material-symbols-outlined,
+.profile-btn .material-symbols-outlined {
   font-size: 21px;
 }
 

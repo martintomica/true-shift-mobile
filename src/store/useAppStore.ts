@@ -6,6 +6,8 @@ interface AppState {
   // navigation
   activeScreen: ScreenName;
   setActiveScreen: (screen: ScreenName) => void;
+  workerMode: boolean;
+  setWorkerMode: (value: boolean) => void;
 
   // shift clock
   shiftActive: boolean;
@@ -46,6 +48,8 @@ interface AppState {
 export const useAppStore = create<AppState>((set, get) => ({
   activeScreen: 'home',
   setActiveScreen: (screen) => set({ activeScreen: screen, selectedWorker: null }),
+  workerMode: false,
+  setWorkerMode: (value) => set({ workerMode: value }),
 
   shiftActive: false,
   elapsedSeconds: 6 * 3600 + 24 * 60 + 12,

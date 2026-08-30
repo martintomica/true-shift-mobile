@@ -18,6 +18,7 @@ export default function App() {
   const hideToast = useAppStore((s) => s.hideToast);
   const toastVisible = useAppStore((s) => s.toastVisible);
   const activeScreen = useAppStore((s) => s.activeScreen);
+  const workerMode = useAppStore((s) => s.workerMode);
 
   // Auto-hide the incident toast after a few seconds, like the original setTimeout.
   useEffect(() => {
@@ -33,20 +34,29 @@ export default function App() {
         <AppHeader />
 
         <main className="screens">
-          <HomeScreen />
-          <AttendanceScreen />
-          <TripScreen />
-          <MapScreen />
-          <NotificationsScreen />
+          {workerMode ? (
+            <>
+              <HomeScreen />
+              <AttendanceScreen />
+            </>
+          ) : (
+            <>
+              <HomeScreen />
+              <AttendanceScreen />
+              <TripScreen />
+              <MapScreen />
+              <NotificationsScreen />
+            </>
+          )}
         </main>
 
-        {activeScreen !== 'trip' && (
+        {!workerMode && activeScreen !== 'trip' && (
           <button className="fab chamfer-sm" onClick={showToast} title="Nahlásit incident">
             <span className="material-symbols-outlined">report</span>
           </button>
         )}
 
-        {activeScreen !== 'trip' && <Toast />}
+        {!workerMode && activeScreen !== 'trip' && <Toast />}
         <TabBar />
       </div>
     </div>

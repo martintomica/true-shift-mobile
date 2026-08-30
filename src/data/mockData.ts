@@ -181,6 +181,8 @@ export const workerDetails: Record<string, WorkerDetail> = {
     time: '06:48',
     trust: '96',
     incident: 'none',
+    vacationDaysUsed: 5,
+    vacationDaysTotal: 20,
   },
   'Lukáš Beneš': {
     z: 'Z1002',
@@ -190,6 +192,8 @@ export const workerDetails: Record<string, WorkerDetail> = {
     time: '06:51',
     trust: '94',
     incident: 'none',
+    vacationDaysUsed: 8,
+    vacationDaysTotal: 20,
   },
   'Jan Dvořák': {
     z: 'Z1003',
@@ -199,6 +203,8 @@ export const workerDetails: Record<string, WorkerDetail> = {
     time: '06:52',
     trust: '91',
     incident: 'none',
+    vacationDaysUsed: 3,
+    vacationDaysTotal: 20,
   },
 
   'Petr Malý': {
@@ -209,6 +215,8 @@ export const workerDetails: Record<string, WorkerDetail> = {
     time: '06:42',
     trust: '95',
     incident: 'none',
+    vacationDaysUsed: 6,
+    vacationDaysTotal: 20,
   },
   'Tomáš Král': {
     z: 'Z1005',
@@ -219,6 +227,8 @@ export const workerDetails: Record<string, WorkerDetail> = {
     trust: '72',
     incident: 'late',
     lateMinutes: 22,
+    vacationDaysUsed: 10,
+    vacationDaysTotal: 20,
   },
   'Marek Fiala': {
     z: 'Z1006',
@@ -228,6 +238,8 @@ export const workerDetails: Record<string, WorkerDetail> = {
     time: '07:03',
     trust: '68',
     incident: 'none',
+    vacationDaysUsed: 12,
+    vacationDaysTotal: 20,
   },
 
   'David Kučera': {
@@ -238,6 +250,8 @@ export const workerDetails: Record<string, WorkerDetail> = {
     time: '06:39',
     trust: '93',
     incident: 'none',
+    vacationDaysUsed: 4,
+    vacationDaysTotal: 20,
   },
   'Roman Černý': {
     z: 'Z1008',
@@ -247,6 +261,8 @@ export const workerDetails: Record<string, WorkerDetail> = {
     time: '06:44',
     trust: '91',
     incident: 'none',
+    vacationDaysUsed: 7,
+    vacationDaysTotal: 20,
   },
   'Jiří Toman': {
     z: 'Z1009',
@@ -257,6 +273,8 @@ export const workerDetails: Record<string, WorkerDetail> = {
     trust: '76',
     incident: 'late',
     lateMinutes: 19,
+    vacationDaysUsed: 9,
+    vacationDaysTotal: 20,
   },
 
   'Ondřej Blažek': {
@@ -267,6 +285,8 @@ export const workerDetails: Record<string, WorkerDetail> = {
     time: '06:36',
     trust: '97',
     incident: 'none',
+    vacationDaysUsed: 2,
+    vacationDaysTotal: 20,
   },
   'Michal Zeman': {
     z: 'Z1011',
@@ -277,6 +297,8 @@ export const workerDetails: Record<string, WorkerDetail> = {
     trust: '70',
     incident: 'late',
     lateMinutes: 18,
+    vacationDaysUsed: 11,
+    vacationDaysTotal: 20,
   },
   'Radek Němec': {
     z: 'Z1012',
@@ -287,6 +309,8 @@ export const workerDetails: Record<string, WorkerDetail> = {
     trust: '29',
     incident: 'alcohol',
     alcoholPromile: 0.3,
+    vacationDaysUsed: 15,
+    vacationDaysTotal: 20,
   },
 
   'Filip Horák': {
@@ -297,6 +321,8 @@ export const workerDetails: Record<string, WorkerDetail> = {
     time: '06:49',
     trust: '92',
     incident: 'none',
+    vacationDaysUsed: 6,
+    vacationDaysTotal: 20,
   },
   'Martin Veselý': {
     z: 'Z1014',
@@ -306,6 +332,8 @@ export const workerDetails: Record<string, WorkerDetail> = {
     time: '06:50',
     trust: '90',
     incident: 'none',
+    vacationDaysUsed: 5,
+    vacationDaysTotal: 20,
   },
   'Václav Pokorný': {
     z: 'Z1015',
@@ -315,6 +343,8 @@ export const workerDetails: Record<string, WorkerDetail> = {
     time: '07:07',
     trust: '66',
     incident: 'none',
+    vacationDaysUsed: 13,
+    vacationDaysTotal: 20,
   },
 
   'Adam Svoboda': {
@@ -325,6 +355,8 @@ export const workerDetails: Record<string, WorkerDetail> = {
     time: '06:41',
     trust: '95',
     incident: 'none',
+    vacationDaysUsed: 3,
+    vacationDaysTotal: 20,
   },
   'Josef Šimek': {
     z: 'Z1017',
@@ -335,6 +367,8 @@ export const workerDetails: Record<string, WorkerDetail> = {
     trust: '74',
     incident: 'late',
     lateMinutes: 21,
+    vacationDaysUsed: 14,
+    vacationDaysTotal: 20,
   },
   'Daniel Urban': {
     z: 'Z1018',
@@ -344,6 +378,8 @@ export const workerDetails: Record<string, WorkerDetail> = {
     time: '06:46',
     trust: '91',
     incident: 'none',
+    vacationDaysUsed: 7,
+    vacationDaysTotal: 20,
   },
 
   'Patrik Navrátil': {
@@ -354,6 +390,8 @@ export const workerDetails: Record<string, WorkerDetail> = {
     time: '06:34',
     trust: '96',
     incident: 'none',
+    vacationDaysUsed: 4,
+    vacationDaysTotal: 20,
   },
   'Aleš Bartoš': {
     z: 'Z1020',
@@ -364,6 +402,8 @@ export const workerDetails: Record<string, WorkerDetail> = {
     trust: '34',
     incident: 'alcohol',
     alcoholPromile: 0.24,
+    vacationDaysUsed: 16,
+    vacationDaysTotal: 20,
   },
   'Zdeněk Havlíček': {
     z: 'Z1021',
@@ -373,6 +413,8 @@ export const workerDetails: Record<string, WorkerDetail> = {
     time: '07:09',
     trust: '64',
     incident: 'none',
+    vacationDaysUsed: 11,
+    vacationDaysTotal: 20,
   },
 
   'Vít Polák': {
@@ -383,6 +425,8 @@ export const workerDetails: Record<string, WorkerDetail> = {
     time: '06:43',
     trust: '94',
     incident: 'none',
+    vacationDaysUsed: 5,
+    vacationDaysTotal: 20,
   },
   'Samuel Konečný': {
     z: 'Z1023',
@@ -392,6 +436,8 @@ export const workerDetails: Record<string, WorkerDetail> = {
     time: '06:45',
     trust: '93',
     incident: 'none',
+    vacationDaysUsed: 8,
+    vacationDaysTotal: 20,
   },
   'Richard Hájek': {
     z: 'Z1024',
@@ -402,6 +448,8 @@ export const workerDetails: Record<string, WorkerDetail> = {
     trust: '71',
     incident: 'late',
     lateMinutes: 17,
+    vacationDaysUsed: 12,
+    vacationDaysTotal: 20,
   },
 
   'Matěj Dostál': {
@@ -412,6 +460,8 @@ export const workerDetails: Record<string, WorkerDetail> = {
     time: '06:37',
     trust: '98',
     incident: 'none',
+    vacationDaysUsed: 2,
+    vacationDaysTotal: 20,
   },
   'Jaroslav Seidl': {
     z: 'Z1026',
@@ -421,6 +471,8 @@ export const workerDetails: Record<string, WorkerDetail> = {
     time: '06:53',
     trust: '92',
     incident: 'none',
+    vacationDaysUsed: 6,
+    vacationDaysTotal: 20,
   },
   'Libor Staněk': {
     z: 'Z1027',
@@ -430,6 +482,8 @@ export const workerDetails: Record<string, WorkerDetail> = {
     time: '06:56',
     trust: '88',
     incident: 'none',
+    vacationDaysUsed: 9,
+    vacationDaysTotal: 20,
   },
 
   'Štěpán Růžička': {
@@ -440,6 +494,8 @@ export const workerDetails: Record<string, WorkerDetail> = {
     time: '06:40',
     trust: '95',
     incident: 'none',
+    vacationDaysUsed: 4,
+    vacationDaysTotal: 20,
   },
   'Milan Jelínek': {
     z: 'Z1029',
@@ -450,6 +506,8 @@ export const workerDetails: Record<string, WorkerDetail> = {
     trust: '73',
     incident: 'late',
     lateMinutes: 18,
+    vacationDaysUsed: 10,
+    vacationDaysTotal: 20,
   },
   'Dominik Pospíšil': {
     z: 'Z1030',
@@ -459,6 +517,8 @@ export const workerDetails: Record<string, WorkerDetail> = {
     time: '07:06',
     trust: '27',
     incident: 'none',
+    vacationDaysUsed: 17,
+    vacationDaysTotal: 20,
   },
 };
 

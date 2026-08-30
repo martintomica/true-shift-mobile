@@ -4,6 +4,8 @@ import { screenTitles } from '../data/mockData';
 export function AppHeader() {
   const activeScreen = useAppStore((s) => s.activeScreen);
   const setActiveScreen = useAppStore((s) => s.setActiveScreen);
+  const workerMode = useAppStore((s) => s.workerMode);
+  const setWorkerMode = useAppStore((s) => s.setWorkerMode);
   const unresolvedCount = useAppStore((s) => s.unresolvedCount());
 
   return (
@@ -32,10 +34,30 @@ export function AppHeader() {
           Online
         </span>
 
-        <button className="bell-btn" onClick={() => setActiveScreen('notifications')}>
-          <span className="material-symbols-outlined">notifications</span>
-          {unresolvedCount > 0 && <span className="badge-count">{unresolvedCount}</span>}
+        <button
+          className="profile-btn"
+          onClick={() => {
+            if (workerMode) {
+              setWorkerMode(false);
+              setActiveScreen('home');
+              return;
+            }
+
+            setWorkerMode(true);
+            setActiveScreen('home');
+          }}
+          aria-label="Profil dělníka"
+          title="Profil dělníka"
+        >
+          <span className="material-symbols-outlined">person</span>
         </button>
+
+        {!workerMode && (
+          <button className="bell-btn" onClick={() => setActiveScreen('notifications')}>
+            <span className="material-symbols-outlined">notifications</span>
+            {unresolvedCount > 0 && <span className="badge-count">{unresolvedCount}</span>}
+          </button>
+        )}
       </div>
     </div>
   );
