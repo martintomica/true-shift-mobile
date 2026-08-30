@@ -317,9 +317,8 @@ export function TripScreen() {
               {routeStatus === 'ready' && `${routeDistanceKm} km · přibližně ${routeDurationMin} min`}
               {routeStatus === 'error' && 'Trasu se nepodařilo načíst'}
             </div>
-            <p className="trip-copy">Cesta je aktivní. Po příjezdu zaznamenejte ukončení pracovní cesty.</p>
+            <button className="trip-secondary" type="button" onClick={cancelTrip}>Zrušit jízdu</button>
           </div>
-          <button className="trip-secondary" type="button" onClick={cancelTrip}>Zrušit jízdu</button>
         </div>
       )}
     </section>
